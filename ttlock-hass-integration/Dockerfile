@@ -3,9 +3,7 @@ FROM $BUILD_FROM
 
 ENV LANG C.UTF-8
 
-RUN cat /etc/apk/repositories
-RUN set -eux && sed -i 's/https:\/\/dl-cdn.alpinelinux.org/http:\/\/mirrors.aliyun.com/g' /etc/apk/repositories
-RUN cat /etc/apk/repositories
+RUN set -eux && sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
 RUN apk update
 RUN apk add --no-cache nodejs npm python3 py3-pip alpine-sdk libcap bluez bluez-dev eudev-dev
@@ -17,7 +15,7 @@ COPY start.sh /app/start.sh
 COPY addon /app
 RUN rm -rf /app/node_modules
 
-RUN cd /app && npm i
+RUN cd /app && npm i --registry https://registry.npm.taobao.org
 
 # here we should just copy the /app contents to a run image with nodejs and other requirements only
 
